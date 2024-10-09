@@ -1,0 +1,21 @@
+services:
+  logstream-test:
+    build:
+      context: .
+      dockerfile: docker/logstream/Dockerfile
+    volumes:
+      - ./testdata/log.log:/var/log/log.log
+    environment:
+      LOGSTREAM_HOSTS: '["logstash-test:443"]'
+    depends_on:
+      - logstash-test
+    command: filebeat -e
+  logstash-test:
+    build:
+      context: .
+      dockerfile: docker/logstash/Dockerfile
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    ports:
+      - "443:443"
+    volumes:
+      - ./logstash.conf:/etc/logstash/conf.d/logstash.conf

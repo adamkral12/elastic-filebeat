@@ -1,0 +1,11 @@
+output.logstash:
+  hosts: ${LOGSTREAM_HOSTS}
+
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/log/log.log
+    tags: ["test-tag"]
+processors:
+  - decode_json_fields:
+      fields: ["message"]
